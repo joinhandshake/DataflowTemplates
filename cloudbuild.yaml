@@ -69,7 +69,7 @@ artifacts:
   # Upload the jars created during the build.
   objects:
     location: 'gs://${_ARTIFACT_BUCKET}/dataflow/templates/$COMMIT_SHA'
-    paths: ['target/*.jar']
+    paths: ['target/*.jar', 'target/surefire-reports']
 
 options:
   # Use higher CPU machines so the caching and build steps are faster.

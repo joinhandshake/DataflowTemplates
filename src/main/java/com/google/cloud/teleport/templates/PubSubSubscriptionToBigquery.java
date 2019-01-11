@@ -55,7 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link PubSubToBigQuery} pipeline is a streaming pipeline which ingests data in JSON format
+ * The {@link PubSubSubscriptionToBigQuery} pipeline is a streaming pipeline which ingests data in JSON format
  * from Cloud Pub/Sub, executes a UDF, and outputs the resulting records to BigQuery. Any errors
  * which occur in the transformation of the data or execution of the UDF will be output to a
  * separate errors table in BigQuery. The errors table will be created if it does not exist prior to
@@ -81,7 +81,7 @@ import org.slf4j.LoggerFactory;
  *
  * # Build the template
  * mvn compile exec:java \
- * -Dexec.mainClass=com.google.cloud.teleport.templates.PubSubToBigQuery \
+ * -Dexec.mainClass=com.google.cloud.teleport.templates.PubSubSubscriptionToBigQuery \
  * -Dexec.cleanupDaemonThreads=false \
  * -Dexec.args=" \
  * --project=${PROJECT_ID} \
@@ -102,10 +102,10 @@ import org.slf4j.LoggerFactory;
  * outputDeadletterTable=data-analytics-pocs:demo.pubsub_to_bigquery_deadletter"
  * </pre>
  */
-public class PubSubToBigQuery {
+public class PubSubSubscriptionToBigQuery {
 
   /** The log to output status messages to. */
-  private static final Logger LOG = LoggerFactory.getLogger(PubSubToBigQuery.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PubSubSubscriptionToBigQuery.class);
 
   /** The tag for the main output for the UDF. */
   public static final TupleTag<FailsafeElement<PubsubMessage, String>> UDF_OUT =
@@ -151,7 +151,7 @@ public class PubSubToBigQuery {
   /**
    * The main entry-point for pipeline execution. This method will start the pipeline but will not
    * wait for it's execution to finish. If blocking execution is required, use the {@link
-   * PubSubToBigQuery#run(Options)} method to start the pipeline and invoke {@code
+   * PubSubSubscriptionToBigQuery#run(Options)} method to start the pipeline and invoke {@code
    * result.waitUntilFinish()} on the {@link PipelineResult}.
    *
    * @param args The command-line args passed by the executor.
@@ -274,13 +274,13 @@ public class PubSubToBigQuery {
    * <p>The {@link PCollectionTuple} output will contain the following {@link PCollection}:
    *
    * <ul>
-   *   <li>{@link PubSubToBigQuery#UDF_OUT} - Contains all {@link FailsafeElement} records
+   *   <li>{@link PubSubSubscriptionToBigQuery#UDF_OUT} - Contains all {@link FailsafeElement} records
    *       successfully processed by the optional UDF.
-   *   <li>{@link PubSubToBigQuery#UDF_DEADLETTER_OUT} - Contains all {@link FailsafeElement}
+   *   <li>{@link PubSubSubscriptionToBigQuery#UDF_DEADLETTER_OUT} - Contains all {@link FailsafeElement}
    *       records which failed processing during the UDF execution.
-   *   <li>{@link PubSubToBigQuery#TRANSFORM_OUT} - Contains all records successfully converted from
+   *   <li>{@link PubSubSubscriptionToBigQuery#TRANSFORM_OUT} - Contains all records successfully converted from
    *       JSON to {@link TableRow} objects.
-   *   <li>{@link PubSubToBigQuery#TRANSFORM_DEADLETTER_OUT} - Contains all {@link FailsafeElement}
+   *   <li>{@link PubSubSubscriptionToBigQuery#TRANSFORM_DEADLETTER_OUT} - Contains all {@link FailsafeElement}
    *       records which couldn't be converted to table rows.
    * </ul>
    */
